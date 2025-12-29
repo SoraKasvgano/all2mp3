@@ -41,6 +41,12 @@ class AudioConverter:
         except (subprocess.CalledProcessError, FileNotFoundError):
             pass
             
+        # 检查PyInstaller onefile模式的临时目录
+        if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+            ffmpeg_exe = os.path.join(sys._MEIPASS, 'ffmpeg.exe')
+            if os.path.exists(ffmpeg_exe):
+                return ffmpeg_exe
+            
         # 检查当前目录
         ffmpeg_exe = os.path.join(os.getcwd(), 'ffmpeg.exe')
         if os.path.exists(ffmpeg_exe):
